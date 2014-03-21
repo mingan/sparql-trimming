@@ -1,0 +1,37 @@
+#PREFIX dcterms: <http://purl.org/dc/terms/>
+#PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+
+DELETE { ?s ?p ?o . }
+INSERT { ?s ?p ?cleaned_with_lang . }
+
+WHERE {
+  ### Predicate filtering ###
+  # Any predicate
+  ?s ?p ?o .
+  # or single predicate
+  #?s dc:title ?o .
+  
+  ### Optional fitlering by class of subject ###
+  #?s a skos:Concept .
+
+  ### Optional filter by language tag ###
+  #FILTER(langMatches(lang(?o), 'cs'))
+  
+  
+  
+  ### Don't modify below this line ### 
+  FILTER(isLiteral(?o))
+  
+  BIND('^\\s+(.*?)\\s*$|^(.*?)\\s+$' 
+    AS ?regexp)
+  FILTER(REGEX(?o, ?regexp))
+  BIND(REPLACE(?o, ?regexp, '$1$2') 
+    AS ?cleaned)
+  
+  BIND(
+    IF(
+      ?lang = '', 
+      ?cleaned, 
+      STRLANG(?cleaned, ?lang)) 
+    AS ?cleaned_with_lang)
+}

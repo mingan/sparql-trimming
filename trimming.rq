@@ -9,7 +9,7 @@ WHERE {
   # Any predicate
   ?s ?p ?o .
   # or single predicate
-  #?s dc:title ?o .
+  #?s dcterms:title ?o .
   
   ### Optional fitlering by class of subject ###
   #?s a skos:Concept .

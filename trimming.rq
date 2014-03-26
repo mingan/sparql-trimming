@@ -30,7 +30,7 @@ WHERE {
   
   BIND(
     IF(
-      ?lang = '', 
+      lang(?o) = '', 
       ?cleaned, 
       STRLANG(?cleaned, ?lang)) 
     AS ?cleaned_with_lang)

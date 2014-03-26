@@ -1,5 +1,5 @@
-#PREFIX dcterms: <http://purl.org/dc/terms/>
-#PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 
 DELETE { ?s ?p ?o . }
 INSERT { ?s ?p ?cleaned_with_lang . }
@@ -12,7 +12,7 @@ WHERE {
   #?s dcterms:title ?o .
   
   ### Optional fitlering by class of subject ###
-  #?s a skos:Concept .
+  #?s a foaf:Person .
 
   ### Optional filter by language tag ###
   #FILTER(langMatches(lang(?o), 'cs'))

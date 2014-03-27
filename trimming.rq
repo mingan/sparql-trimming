@@ -5,32 +5,40 @@ DELETE { ?s ?p ?o . }
 INSERT { ?s ?p ?cleaned_with_lang . }
 
 WHERE {
-  ### Predicate filtering ###
-  # Any predicate
   ?s ?p ?o .
-  # or single predicate
-  #?s dcterms:title ?o .
+  
+  ### Optional predicate filtering ###
+  #BIND(dcterms:title AS ?predicate)
   
   ### Optional fitlering by class of subject ###
   #?s a foaf:Person .
 
   ### Optional filter by language tag ###
-  #FILTER(langMatches(lang(?o), 'cs'))
+  #FILTER(langMatches(?lang, 'cs'))
   
   
   
   ### Don't modify below this line ### 
   FILTER(isLiteral(?o))
   
+  FILTER(
+    IF(
+      BOUND(?predicate),
+      ?p = ?predicate,
+      true
+    )
+  )
+  
   BIND('^\\s+(.*?)\\s*$|^(.*?)\\s+$' 
     AS ?regexp)
   FILTER(REGEX(?o, ?regexp))
   BIND(REPLACE(?o, ?regexp, '$1$2') 
     AS ?cleaned)
+  BIND(lang(?o) AS ?lang)
   
   BIND(
     IF(
-      lang(?o) = '', 
+      ?lang = '', 
       ?cleaned, 
       STRLANG(?cleaned, ?lang)) 
     AS ?cleaned_with_lang)
